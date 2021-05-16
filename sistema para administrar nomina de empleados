@@ -1,0 +1,978 @@
+/*
+ * logica.h
+ *
+ *  Created on: 15 may. 2021
+ *      Author: Ususario
+ */
+
+#ifndef LOGICA_H_
+#define LOGICA_H_
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/**
+ * @fn int darDeAltaEmpleado(empleado, int)
+ * @brief
+ *
+ * @param list
+ * @param TAM
+ * @return
+ */
+int darDeAltaEmpleado(empleado list, int TAM);
+
+/**
+ * @fn int pedirEmpleado(int, char[], char[], float*, int*)
+ * @brief
+ *
+ * @param id
+ * @param nombre
+ * @param apellido
+ * @param salario
+ * @param sector
+ * @return
+ */
+int pedirEmpleado(int id, char nombre[], char apellido[],float *salario, int *sector);
+
+/**
+ * @fn void eGen_ObtenerID(int*)
+ * @brief
+ *
+ * @param Gen_idIncremental
+ */
+void eGen_ObtenerID(int* Gen_idIncremental);
+
+/**
+ * @fn empleado modificarEmpleado(empleado*, int, int)
+ * @brief
+ *
+ * @param list
+ * @param TAM
+ * @param id
+ * @return
+ */
+empleado modificarEmpleado(empleado *list,int TAM, int id);
+
+
+/**
+ * @fn int menu(void)
+ * @brief muestra el menu y recibe la respuesta del usuario
+ *
+ * @return retorna el numero de opcion ingresado por el usuario
+ */
+int mostrarMenu(void);
+
+/**
+ * @fn int darDeBajaEmpleado(empleado*, int)
+ * @brief
+ *
+ * @param list
+ * @param TAM
+ * @return
+ */
+int darDeBajaEmpleado(empleado *list,int TAM);
+
+/**
+ * @fn int modificarEmpleado(empleado*, int)
+ * @brief
+ *
+ * @param list
+ * @param TAM
+ * @return
+ */
+int modificarEmpleado(empleado *list,int TAM);
+
+/**
+ * @fn empleado modificarEmpleado(empleado*, int, int)
+ * @brief
+ *
+ * @param list
+ * @param TAM
+ * @param id
+ * @return
+ */
+empleado modificarEmpleado(empleado *list,int TAM, int id);
+
+/**
+ * @fn int empleado_ObtenerLibre(empleado, int)
+ * @brief
+ *
+ * @param array
+ * @param TAM
+ * @return
+ */
+int empleado_ObtenerLibre(empleado array, int TAM);
+
+/**
+ * @fn int ordenPorSalario(empleado, int)
+ * @brief
+ *
+ * @param array
+ * @param TAM
+ * @return
+ */
+int ordenPorSalario(empleado array, int TAM);
+
+#endif /* LOGICA_H_ */
+
+/*
+ ============================================================================
+ Name        : TP2-MonsalboLucio.c
+ Author      : Monsalbo Lucio
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "ArrayEmployees.h"
+
+#define TAM 10000
+
+int main(void)
+{
+
+	/*============================================================================*/
+//	int   id;
+//	char  nombre[];
+//	char  apellido[];
+//	float salario;
+//	int   sector;
+//	int Gen_idIncremental;
+
+	/*============================================================================*/
+
+	setbuf(stdout, NULL);
+
+	int validacion;
+	int menu;
+
+	//CREO ARRAY DE ESTRUCTURA
+	empleado list[TAM];
+
+	//INICIALIAZO ARRAY DE ESTRUCTURA
+	validacion = initempleados( list, TAM);
+
+	if(validacion != "0")
+	{
+		printf("ERROR, no se a podido inicializar correctamente los empleados, reinicie el programa");
+	}
+
+	menu = mostrarMenu();
+
+	switch(menu)
+	{
+	case 1:
+		validacion = darDeAltaEmpleado(list, TAM);
+		if (validacion != "0")
+		{
+			printf("ERROR al intetar dar de alta el usuario");
+		}
+		break;
+
+
+	case 2:
+		list modificarEmpleado(list , TAM, id);
+		break;
+
+
+	case 3:
+		validacion = darDeBajaEmpleado(list, TAM);
+		break;
+
+
+	case 4:
+
+		break;
+
+	case 5:
+		break;
+
+	case 6:
+		break;
+	}
+
+	return EXIT_SUCCESS;
+}
+
+/*
+ * utn.c
+ *
+ *  Created on: 15 may. 2021
+ *      Author: Ususario
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+
+                              //VALIDACIONES NUMEROS//
+int getFloat(char* resultado, char *mensaje, char* mensajeError, int minimo, int maximo,int reintentos)
+{
+	int retorno;
+	float auxiliarFloat;
+	int i;
+
+	retorno =-1;
+
+	if(resultado!=NULL && mensaje!=NULL && mensajeError!=NULL && minimo<=maximo && reintentos>=0)
+	{
+		for(reintentos=i;i<=0;i--)
+		{
+			printf("%s",mensaje);
+			fflush("stdin");
+			scanf("%f",&resultado);
+			if(resultado>minimo && resultado<maximo)
+			{
+				auxiliarFloat=*resultado;
+				retorno = 0;
+				break;
+			}else{
+				printf("\nEl numero ingresado no esta dentro del limite(%d-%d), intente nuevamente\n",minimo,maximo);
+			}
+		}
+	}
+    return retorno;
+}
+
+
+int getInt(char* resultado, char *mensaje, char* mensajeError, int minimo, int maximo,int reintentos)
+{
+	int retorno;
+	int auxiliarInt;
+
+	retorno =-1;
+
+	if(resultado!=NULL && mensaje!=NULL && mensajeError!=NULL && minimo>=maximo && reintentos>=0)
+	{
+		for(reintentos;reintentos<=0;reintentos--)
+		{
+			printf("%s",mensaje);
+			fflush("stdin");
+			scanf("%d",&resultado);
+			if(resultado>minimo && resultado<maximo)
+			{
+				auxiliarInt=*resultado;
+				retorno = 0;
+				break;
+			}else{
+				printf("\nEl numero ingresado no esta dentro del limite(%d-%d), intente nuevamente\n",minimo, maximo);
+			}
+		}
+	}
+    return retorno;
+}
+
+
+
+
+int getChar(char* resultado, char *mensaje, char* mensajeError, int minimo,int maximo,int reintentos)
+{
+	int retorno;
+	int auxiliarChar;
+
+	retorno =-1;
+
+	if(resultado!=NULL && mensaje!=NULL && mensajeError!=NULL && minimo>=maximo && reintentos>=0)
+	{
+		for(reintentos;reintentos<=0;reintentos--)
+		{
+			printf("%s",mensaje);
+			fflush("stdin");
+			scanf("%c",&resultado);
+			if(resultado>minimo && resultado<maximo)
+			{
+				auxiliarChar=*resultado;
+				retorno = 0;
+				break;
+			}else{
+				printf("\nLa palabra ingresada no esta dentro del limite(%d-%d), intente nuevamente\n",minimo ,maximo);
+			}
+		}
+	}
+    return retorno;
+}
+
+
+
+char getNumeroAleatorio(int desde , int hasta, int iniciar)
+{
+    if(iniciar)
+        srand (time(NULL));
+    return desde + (rand() % (hasta + 1 - desde)) ;
+}
+
+/**
+ * \brief Solicita un texto al usuario y lo devuelve
+ * \param mensaje Es el mensaje a ser mostrado
+ * \param input Array donde se cargar� el texto ingresado
+ * \return void
+ */
+
+void getString(char mensaje[],char input[])
+{
+    printf("%s",mensaje);
+    scanf ("%s", input);
+}
+
+
+int getStringLetras(char mensaje[],char input[])
+{
+    char aux[256];
+    int retorno;
+
+    getString(mensaje,aux);
+    if(soloLetras(aux))
+    {
+        strcpy(input,aux);
+        retorno = 0;
+    }
+    return 0;
+}
+
+
+int soloLetras(char str[])
+{
+   int i=0;
+   while(str[i] != '\0')
+   {
+       if((str[i] != ' ') && (str[i] < 'a' || str[i] > 'z') && (str[i] < 'A' || str[i] > 'Z'))
+           return 0;
+       i++;
+   }
+   return 1;
+}
+
+
+int getStringNumeros(char mensaje[],char input[])
+{
+    char aux[256];
+    getString(mensaje,aux);
+    if(esNumerico(aux))
+    {
+        strcpy(input,aux);
+        return 1;
+    }
+    return 0;
+}
+
+
+/*
+ * UTN.c
+ *
+ *  Created on: 12 may. 2021
+ *      Author: Ususario
+ */
+
+/**
+ * \brief Solicita un n�mero al usuario y devuelve el resultado
+ * \param mensaje Es el mensaje a ser mostrado
+ * \return El n�mero ingresado por el usuario
+ *
+ */
+int getFloat(char* resultado, char *mensaje, char* mensajeError, int minimo, int maximo,int reintentos);
+
+/**
+ * \brief Solicita un n�mero al usuario y devuelve el resultado
+ * \param mensaje Es el mensaje a ser mostrado
+ * \return El n�mero ingresado por el usuario
+ *
+ */
+int getInt(char* resultado, char *mensaje, char* mensajeError, int minimo, int maximo,int reintentos);
+
+
+/**
+ * \brief Solicita un caracter al usuario y devuelve el resultado
+ * \param mensaje Es el mensaje a ser mostrado
+ * \return El caracter ingresado por el usuario
+ *
+ */
+int getChar(char* resultado, char *mensaje, char* mensajeError, int minimo,int maximo,int reintentos);
+
+
+/**
+ * \brief Genera un n�mero aleatorio
+ * \param desde N�mero aleatorio m�nimo
+ * \param hasta N�mero aleatorio m�ximo
+ * \param iniciar Indica si se trata del primer n�mero solicitado 1 indica que si
+ * \return retorna el n�mero aleatorio generado
+ *
+ */
+char getNumeroAleatorio(int desde , int hasta, int iniciar);
+
+
+/**
+ * \brief Solicita un texto al usuario y lo devuelve
+ * \param mensaje Es el mensaje a ser mostrado
+ * \param input Array donde se cargar� el texto ingresado
+ * \return void
+ */
+void getString(char mensaje[],char input[]);
+
+
+/**
+ * \brief Solicita un texto al usuario y lo devuelve
+ * \param mensaje Es el mensaje a ser mostrado
+ * \param input Array donde se cargar� el texto ingresado
+ * \return 1 si el texto contiene solo letras
+ */
+int getStringLetras(char mensaje[],char input[]);
+
+
+/**
+ * \brief Verifica si el valor recibido contiene solo letras
+ * \param str Array con la cadena a ser analizada
+ * \return 1 si contiene solo ' ' y letras y 0 si no lo es
+ *
+ */
+int soloLetras(char str[]);
+
+
+/**
+ * \brief Solicita un texto num�rico al usuario y lo devuelve
+ * \param mensaje Es el mensaje a ser mostrado
+ * \param input Array donde se cargar� el texto ingresado
+ * \return 1 si el texto contiene solo n�meros
+ */
+int getStringNumeros(char mensaje[],char input[]);
+
+
+/*
+ * Arrayempleados.c
+ *
+ *  Created on: 14 may. 2021
+ *      Author: Ususario
+ */
+
+#include "ArrayEmployees.h"
+int TAM =5;
+
+/*============================================================================*/
+int initempleados(empleado* list, int TAM)
+{
+	int i;
+	int retorno;
+
+	retorno = -1;
+
+	if (list != NULL && TAM > 0)
+	{
+		for (i = 0; i < TAM; i++)
+		{
+			list[i].isEmpty = LIBRE;
+		}
+		retorno = 0;
+	}
+	return retorno;
+}
+
+/*============================================================================*/
+
+int addEmpleado(empleado* list, int TAM, int id, char nombre[], char apellido[],float salario, int sector)
+{
+	int retorno;
+	int validacion;
+	int libre;
+
+	empleado auxiliar = list;
+
+	auxiliar.id = id;
+	auxiliar.nombre = nombre;
+	auxiliar.apellido = apellido;
+	auxiliar.salario = salario;
+	auxiliar.sector = sector;
+
+	printf("esta seguro que quiere dar de alta el empleado ingresado?\n"
+			"1- SI\n"
+			"2- NO\n");
+	scanf("%d", &validacion);
+	if(validacion == 1)
+	{
+		libre = empleado_ObtenerLibre( list, TAM);
+
+		strcpy(auxiliar,list[libre]);
+		retorno = 0;
+	}
+
+	return retorno;
+}
+
+/*============================================================================*/
+
+int findempleadoById(empleado *list, int TAM, int *id)
+{
+	int retorno = -1;
+	int i;
+
+	//SI EXISTE EL ARRAY Y EL LIMITE ES VALIDO
+	if (list != NULL && TAM > 0)
+	{
+		//RECORRO TODO EL ARRAY
+		for (i = 0; i < TAM; i++)
+		{
+			//BUSCO QUE ESTE "OCUPADO" Y QUE CONCIDA EL ID QUE ESTOY BUSCANDO
+			if (list[i].id == id && list[i].isEmpty == OCUPADO)
+			{
+				//SI ENCONTRE EL ID
+				//DEVUELVO EL INDEX DE DONDE ESTA EL ID BUSCADO Y SALGO
+				retorno = i;
+				break;
+			}
+		}
+	}
+	return retorno;
+}
+
+/*============================================================================*/
+
+int removeempleado(empleado* list,int TAM, int id)
+{
+	int retorno;
+	int validacion;
+
+	retorno = -1;
+
+	/**PREGUNTAR SI DESEA CONTINUAR*/
+	printf("esta seguro que desea eliminar el empleado: %d \n"
+			"1- SI\n"
+			"2- NO\n",id);
+
+	scanf("%d", validacion);
+	if(validacion == "1")
+	{
+		//BAJA ACEPTADA - CAMBIO ESTADO A "BAJA"
+		list[id].isEmpty = LIBRE;
+
+		//RETORNO 1 SI SE DIO DE BAJA CORRECTAMENTE
+		retorno = 1;
+	}else{
+		retorno = 2;
+	}
+	return retorno;
+}
+
+/*============================================================================*/
+
+int sortEmpleados(empleado* list, int TAM, int order)
+{
+	int i;
+	int j;
+	empleado aux;
+	int validacion;
+
+	validacion = -1;
+	printf("1) Listado de empleados alfabeticamente segun apellido y sector\n"
+			"2) Salarios:\n"
+			"           \fTotal\n"
+			"             Promedio\n"
+			"             Empleados arriba del salario promedio");
+
+	switch(menu)
+	{
+	case 1:
+		for (i = 0; i < TAM - 1; i++)
+		{
+			for (j = i + 1; j < TAM; j++)
+			{
+				//PREGUNTO POR ESTADO "OCUPADO" DE AMBOS
+				if (list[i].isEmpty == OCUPADO
+						&& list[j].isEmpty == OCUPADO)
+				{
+					//CRITERIO DE ORDENAMIENTO
+					if (list[i].sector == list[j].sector)
+					{
+						if (list[i].id > list[j].id)
+						{
+							//INTERCAMBIO POSICIONES EN ARRAY
+							aux = list[i];
+							list[i] = list[j];
+							list[j] = aux;
+						}
+					}
+				}
+			}
+		}
+		validacion = 0;
+		break;
+	case 2:
+		validacion = ordenPorSalario(list, TAM);
+		break;
+	}
+
+	return validacion;
+}
+
+/*============================================================================*/
+
+int printEmpleados(empleado* list, int TAM)
+{
+	int i;
+	int retorno;
+
+	retorno = -1;
+
+	for(i=0;i<TAM;i++)
+	{
+		printf("empleado %d: %d %s %s %f %d \n", i ,
+				list[i].id,
+				list[i].nombre,
+				list[i].apellido,
+				list[i].salario,
+				list[i].sector);
+		if(i==TAM)
+		{
+			retorno = 0;
+		}
+	}
+	return retorno;
+}
+
+/*
+ * Arrayempleados.h
+ *
+ *  Created on: 14 may. 2021
+ *      Author: Ususario
+ */
+
+#ifndef ARRAYempleadoS_H_
+#define ARRAYempleadoS_H_
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "logica.h"
+
+
+#define  LIBRE  0
+#define OCUPADO 1
+
+
+typedef struct
+{
+	int    id;
+	char   nombre[51];
+	char   apellido[51];
+	float  salario;
+	int    sector;
+	int    isEmpty;
+}empleado;
+
+/*......................................................................................................*/
+
+/**
+ * @fn int initempleados(empleado*, int)
+ * @brief para indicar todas las posiciones del array que estan vacias,bandera(isEmpty) a TRUE
+ *
+ * @param list empleado* puntero hacia el array de empleados
+ * @param TAM
+ * @return (-1) en caso de error(longitud inv�lida o puntero nulo) - (0) todo ok
+ */
+int initempleados(empleado *list, int TAM);
+
+/*......................................................................................................*/
+
+/**
+ * @fn int addempleado(empleado*, int, int, char[], char)
+ * @brief Agrega en un array de empleados existente los valores recibidos como par�metro en la primer
+ * posici�n libre.
+ *
+ * @param list      empleado*
+ * @param TAM   int
+ * @param id        int
+ * @param nombre[]    char
+ * @param apellido[] char
+ * @param salario    float
+ * @param sector    int
+ * @return retorna (-1) [Longitud no v�lida o puntero NULL o sin espacio libre] (0) todo ok
+ */
+
+int addempleado(empleado *list, int TAM, int id, char nombre[], char apellido[], float salario, int sector);
+
+/*......................................................................................................*/
+
+/**
+ * @fn int findempleadoById(empleado*, int, int)
+ * @brief Busca un empleado recibiendo como par�metro de b�squeda su Id.
+ *
+ * @param list empleado*
+ * @param TAM int
+ * @param id int
+ * @return retorna el empleado index con la posicion o (-1) [Longitud no v�lida o NULL
+ * puntero recibido o empleado no encontrado]
+ */
+int findempleadoById(empleado *list, int TAM, int *id);
+
+/*......................................................................................................*/
+
+/**
+ * @fn int removeempleado(empleado*, int, int)
+ * @brief Elimina de manera l�gica (isEmpty Flag en 1) un empleado recibiendo como par�metro su Id.
+ *
+ * @param list empleado*
+ * @param TAM int
+ * @param id int
+ * @return retorna un int (-1) si Error [Longitud no v�lida o puntero NULO o si no puede
+ * encontrar un empleado] - (0) si est� bien
+ */
+int removeEmpleado(empleado* list,int TAM, int id);
+
+/*......................................................................................................*/
+
+/**
+ * @fn int sortempleados(empleado*, int, int)
+ * @brief Ordena el array de empleados por apellido y sector de manera ascendente o descendente.
+ *
+ * @param list empleado*
+ * @param TAM int
+ * @param ordenar int [1] indica ARRIBA - [0] indica ABAJO
+ * @return  int Devuelve (-1) si hay error [longitud no v�lida o puntero NULO] - (0) si est� bien
+ */
+int sortEmpleados(empleado* list, int TAM, int ordenar);
+
+/*......................................................................................................*/
+
+/**
+ * @fn int printEmpleados(empleado*, int)
+ * @brief Imprime el array de empleados de forma encolumnada
+ *
+ * @param list empleado*
+ * @param TAM int
+ * @return int
+ */
+int printEmpleados(empleado* list, int TAM);
+
+/*......................................................................................................*/
+
+#endif /* ARRAYempleadoS_H_ */
+
+/*
+ * logica.c
+ *
+ *  Created on: 15 may. 2021
+ *      Author: Ususario
+ */
+
+#include "logica.h"
+#include "ArrayEmployees.h"
+
+int darDeAltaEmpleado(empleado list, int TAM)
+{
+	int validacion;
+	char nombre[51];
+	char apellido[51];
+	float salario;
+	int sector;
+	int id;
+	int retorno;
+
+	validacion = pedirEmpleado( nombre[], apellido[], &salario, &sector);
+
+	validacion = empleados_ObtenerID( &id);
+
+	validacion = addEmployee(list , TAM, &id, nombre[], apellido[], &salario, &sector);
+
+	retorno = validacion;
+
+	return retorno;
+}
+
+int pedirEmpleado(int id, char nombre[], char apellido[],float *salario, int *sector)
+{
+	int validacion;
+	int retorno;
+
+	retorno = -1;
+
+	validacion = getStringLetras("ingresar nombre del empleado", &nombre);
+
+
+	validacion = getStringLetras("ingresar apellido del empleado", &apellido);
+
+
+	validacion = getFloat(&salario, "ingresar salario del empleado",
+			"ERROR, ingrese nuevamente salario del empleado",0, 100000000,5);
+
+
+	validacion = getInt(&sector, "ingrese sector del empleado",
+			"ERROR, ingrese nuevamente sector del empleado", 0, 1000,5);
+
+
+	if(validacion == 0)
+	{
+		retorno = 0;
+	}
+
+	return retorno;
+
+}
+
+void eGen_ObtenerID(int* Gen_idIncremental)
+{
+	//INCREMENTA VARIABLE ESTATICA CADA VEZ QUE SE LLAMA ESTA FUNCION
+	*Gen_idIncremental = Gen_idIncremental+1;
+}
+
+int mostrarMenu(void)
+{
+	int menu;
+
+	printf("1. ALTA EMPLEADO\n"
+			"2. MODIFICAR EMPLEADO\n"
+			"3. DAR DE BAJA EMPLEADO\n"
+			"4. INFORMACION:\n" //preguntar cual era para quedara bonito
+			"   a) Listado de empleados alfabeticamente segun apellido y sector\n"
+			"   b) Salarios:\n"
+			"               \fTotal\n"
+			"                 Promedio\n"
+			"                 Empleados arriba del salario promedio");
+	scanf("%d", &menu);
+
+	if(menu=="4")
+	{
+		printf("5) Listado de empleados alfabeticamente segun apellido y sector\n"
+				"6) Salarios:\n"
+				"               \fTotal\n"
+				"                 Promedio\n"
+				"                 Empleados arriba del salario promedio");
+		scanf("%d", &menu);
+	}
+	return menu;
+}
+
+int darDeBajaEmpleado(empleado *list,int TAM)
+{
+	int validacion;
+	int id;
+	int retorno;
+
+	validacion = printEmpleados( list, TAM);
+
+	printf("ingrese el id del empleado a dar de baja");
+	scanf("%d",&id);
+	validacion = findempleadoById(list, TAM, &id);
+
+	if(validacion != 0)
+	{
+		validacion = removeempleado( list, TAM, id);
+	}else{
+		validacion = -1;// no se encontro id
+	}
+
+	retorno = validacion;
+
+	return retorno;
+}
+
+int modificarEmpleado(empleado *list,int TAM)
+{
+	//mostrar alumnos
+	int validacion;
+	int id;
+
+
+	validacion = printEmpleados( list, TAM);
+
+	printf("ingrese el id del empleado a modificar");
+	scanf("%d",&id);
+	validacion = findempleadoById(list, TAM, &id);
+
+	if(validacion != 0)
+	{
+
+	}else{
+		validacion = -1;// no se encontro id
+	}
+
+}
+
+empleado modificarEmpleado(empleado *list,int TAM, int id)
+{
+	empleado auxiliar = list;
+	int validacion;
+	int nombre[51];
+	int apellido[51];
+	float salario;
+	int sector;
+
+	validacion = getStringLetras("ingresar nombre del empleado", &nombre);
+
+
+	validacion = getStringLetras("ingresar apellido del empleado", &apellido);
+
+
+	validacion = getFloat(&salario, "ingresar salario del empleado",
+			"ERROR, ingrese nuevamente salario del empleado",0, 100000000,5);
+
+
+	validacion = getInt(&sector, "ingrese sector del empleado",
+			"ERROR, ingrese nuevamente sector del empleado", 0, 1000,5);
+
+	validacion = addEmployee(auxiliar , TAM, &id, nombre[], apellido[], &salario, &sector);
+}
+
+
+int empleado_ObtenerLibre(empleado array, int TAM)
+{
+	int retorno = -1;
+	int i;
+
+	//SI EXISTE EL ARRAY Y EL LIMITE ES VALIDO
+	if (array != NULL && TAM > 0)
+	{
+		//RECORRO TODO EL ARRAY
+		for (i = 0; i < TAM; i++)
+		{
+			//PREGUNTO POR EL ESTADO "LIBRE"
+			if (array[i].isEmpty == LIBRE)
+			{
+				//OBTENGO EL PRIMER INDEX DEL VECTOR "LIBRE" Y SALGO
+				retorno = i;
+				break;
+			}
+		}
+	}
+	return retorno;
+}
+
+int ordenPorSalario(empleado array, int TAM)
+{
+	int i;
+	int retorno;
+	float acumulador;
+	int contador;
+	float auxiliarSalario;
+	float promedioSalarios;
+
+	contador = 0;
+	acumulador = 0;
+
+	for(i=0;i<TAM;i++)
+	{
+		array[i].salario = auxiliarSalario;
+		contador++;
+		acumulador = acumulador + auxiliarSalario;
+	}
+
+	printf("\nel total de todos los salarios es %d", auxiliarSalario);
+
+	promedioSalarios = acumulador/contador;
+
+	printf("\nel promedio total de los salarios es %d",promedioSalarios);
+
+	for(i=0;i<TAM;i++)
+		{
+			array[i].salario = auxiliarSalario;
+			if(auxiliarSalario>promedioSalarios)
+			{
+				printf("empleado %d: %d %s %s %f %d \n", i ,
+						array[i].id,
+						array[i].nombre,
+						array[i].apellido,
+						array[i].salario,
+						array[i].sector);
+			}
+		}
+	return retorno;
+}
